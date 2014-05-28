@@ -1,0 +1,3 @@
+<% flash.take(1).each do |key, msg| %>
+  <%= content_tag :div, msg, id: key, class: "message" %>
+<% end %>

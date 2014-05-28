@@ -1,0 +1,14 @@
+<h2>Details about <%= @movie.title %></h2>
+
+<ul id="details">
+  <li>Rating: <%= @movie.rating %></li>
+  <li>Released on: <%= @movie.release_date %></li>
+</ul>
+
+<h3>Description</h3>
+
+<p class="description"><%= @movie.description %></p>
+
+<%= link_to "Edit", [:edit, @movie] %>
+<%= button_to "Delete", @movie, method: :delete, data: { confirm: "Are you sure?" } %>
+<%= link_to "Back to movie list", movies_path %>
