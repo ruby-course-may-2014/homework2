@@ -79,5 +79,3 @@ The best way to do the “remembering” will be to use the `session[]` hash. Th
 This is a completely optional task to those who are brave.
 
 Deploy to Heroku by following the same process as we did on the lesson. You may also need to install [Heroku toolbelt](https://toolbelt.heroku.com). The commands heroku create, `heroku run`, `heroku logs`, and `heroku open` may be useful.
-
-You will submit the URI of your deployed Heroku app in a text file with no other contents.
