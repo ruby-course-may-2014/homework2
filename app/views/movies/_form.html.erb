@@ -1,3 +1,10 @@
+<% if @movie.errors.any? %>
+  <div>
+    <h2>There were errors!</h2>
+    <p><%= @movie.errors.full_messages.to_sentence %></p>
+  </div>
+<% end %>
+
 <%= form_for @movie do |f| %>
   <%= f.label :title %>
   <%= f.text_field :title %>
