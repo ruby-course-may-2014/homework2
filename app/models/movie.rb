@@ -12,7 +12,7 @@ class Movie < ActiveRecord::Base
   }
 
   def self.all_ratings
-    Movie.select(:rating).distinct.pluck(:rating)
+    all.map(&:rating).uniq
   end
 
 end
