@@ -13,11 +13,11 @@
   <thead>
     <tr>
       <th class="<%= 'highlight' if session[:sort_by] == 'title' %>">
-        <%= link_to "Movie Title", movies_path(sort_by: 'title') %>
+        <%= link_to "Movie Title", sort_by: 'title' %>
       </th>
       <th>Rating</th>
       <th class="<%= 'highlight' if session[:sort_by] == 'release_date' %>">
-        <%= link_to "Release Date", movies_path(sort_by: 'release_date') %>
+        <%= link_to "Release Date", sort_by: 'release_date' %>
       </th>
       <th>More Info</th>
     </tr>
@@ -28,10 +28,10 @@
         <td><%= movie.title %></td>
         <td><%= movie.rating %></td>
         <td><%= movie.release_date %></td>
-        <td><%= link_to "More about #{movie.title}", movie_path(movie) %></td>
+        <td><%= link_to "More about #{movie.title}", movie %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Add new movie', new_movie_path %>
+<%= link_to 'Add new movie', action: :new %>
