@@ -1,4 +1,6 @@
 <h1>Welcome!</h1>
-<%= link_to "See all movies", movies_path %>
+<%= link_to_if user_signed_in?, "See all movies", movies_path do %>
+  
+<% end %>
 
 <%= render 'movies/movie', movie: @sample_movie %>
