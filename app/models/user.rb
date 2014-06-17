@@ -5,8 +5,4 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
 
-  def admin?
-    false
-  end
-
 end
