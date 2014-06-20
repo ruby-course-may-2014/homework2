@@ -13,8 +13,14 @@ class Movie < ActiveRecord::Base
     res
   }
 
+  before_validation :generate_twin_id, on: :create
+
   def self.all_ratings
     all.map(&:rating).uniq
+  end
+
+  def generate_twin_id
+    self.twin_id = SecureRandom.uuid
   end
 
 end

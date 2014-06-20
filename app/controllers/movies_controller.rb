@@ -5,7 +5,9 @@ class MoviesController < ApplicationController
   def index
     session[:sort_by] = params[:sort_by] if params[:sort_by]
     session[:ratings] = params[:ratings] if params[:ratings]
-    @movies = Movie.list(rating: ratings_params.keys, order: session[:sort_by])
+    @movies = policy_scope(
+      Movie.list(rating: ratings_params.keys, order: session[:sort_by])
+    )
   end
 
   def show
@@ -38,12 +40,25 @@ class MoviesController < ApplicationController
   def update
     @movie = find_movie
     authorize @movie
-    if @movie.update_attributes(movie_params)
+    @movie.attributes = movie_params
+    if @movie.valid?
+      unless @movie.draft?
+        Movie.create! Movie.find(@movie.id).attributes.except('id', 'created_at', 'updated_at')
+        @movie.draft = true
+      end
+      @movie.save
       flash[:notice] = "#{@movie.title} was successfully updated."
       redirect_to @movie
     else
       render 'edit'
     end
+  end
+
+  def publish
+    @movie = find_movie
+    authorize @movie, :update?
+    @movie.update_column :draft, false
+    redirect_to @movie
   end
 
   def destroy

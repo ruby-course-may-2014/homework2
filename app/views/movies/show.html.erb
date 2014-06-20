@@ -1,5 +1,6 @@
 <%= render 'movie', movie: @movie %>
 
 <%= link_to_if(allow.edit?, "Edit", [:edit, @movie]) {} %>
+<%= button_to "Publish", [:publish, @movie], method: :patch, data: { confirm: "Are you sure?" } if @movie.draft? %>
 <%= button_to "Delete", @movie, method: :delete, data: { confirm: "Are you sure?" } %>
 <%= link_to "Back to movie list", movies_path %>

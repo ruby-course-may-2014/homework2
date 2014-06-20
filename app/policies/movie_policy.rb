@@ -1,4 +1,10 @@
 class MoviePolicy < Struct.new(:user, :movie)
+  class Scope < Struct.new(:user, :scope)
+    def resolve
+      scope.where('draft = :d OR user_id = :u', d: false, u: user.id)
+    end
+  end
+
   def show?
     user.admin? || !movie.draft?
   end
