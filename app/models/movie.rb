@@ -1,4 +1,6 @@
 class Movie < ActiveRecord::Base
+  belongs_to :user
+
   validates :title, presence: true
   validates :rating, presence: true,
                      inclusion: {in: ['G','PG','PG-13','R', 'NC-17'], allow_blank: true }

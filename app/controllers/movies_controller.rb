@@ -1,6 +1,6 @@
 class MoviesController < ApplicationController
   before_action :authenticate_user!
-  helper_method :ratings_params, :all_ratings
+  helper_method :ratings_params, :all_ratings, :allow
 
   def index
     session[:sort_by] = params[:sort_by] if params[:sort_by]
@@ -14,10 +14,14 @@ class MoviesController < ApplicationController
 
   def new
     @movie = Movie.new
+    authorize @movie
   end
 
   def create
     @movie = Movie.new movie_params
+    @movie.user = current_user
+    authorize @movie
+
     if @movie.save
       flash[:notice] = "#{@movie.title} was successfully created."
       redirect_to movies_url
@@ -28,10 +32,12 @@ class MoviesController < ApplicationController
 
   def edit
     @movie = find_movie
+    authorize @movie
   end
 
   def update
     @movie = find_movie
+    authorize @movie
     if @movie.update_attributes(movie_params)
       flash[:notice] = "#{@movie.title} was successfully updated."
       redirect_to @movie
@@ -49,12 +55,18 @@ class MoviesController < ApplicationController
 
   private
 
+  def allow
+    Pundit.policy!(current_user, @movie)
+  end
+
   def find_movie
     Movie.find(params[:id])
   end
 
   def movie_params
-    params[:movie].permit(:title, :rating, :release_date, :description)
+    fields = [:title, :rating, :release_date, :description]
+    fields += [:published] if current_user.admin?
+    params.require(:movie).permit(fields)
   end
 
   def all_ratings
