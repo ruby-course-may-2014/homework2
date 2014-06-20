@@ -64,7 +64,9 @@ class MoviesController < ApplicationController
   end
 
   def movie_params
-    params[:movie].permit(:title, :rating, :release_date, :description)
+    fields = [:title, :rating, :release_date, :description]
+    fields += [:published] if current_user.admin?
+    params.require(:movie).permit(fields)
   end
 
   def all_ratings
