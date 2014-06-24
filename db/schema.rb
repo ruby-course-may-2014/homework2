@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20140620170347) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "draft_id"
-    t.string   "type"
+    t.string   "type",         default: "Movie::Draft"
   end
 
   add_index "movies", ["draft_id"], name: "index_movies_on_draft_id"

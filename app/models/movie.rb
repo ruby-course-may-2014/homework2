@@ -42,7 +42,7 @@ class Movie < ActiveRecord::Base
     belongs_to :origin, class_name: 'Movie::Published', foreign_key: :draft_id
 
     def publish!
-      origin.update_attributes self.attributes.without(:id)
+      (origin || build_origin).update_attributes self.attributes.without(:id)
       destroy
     end
   end
