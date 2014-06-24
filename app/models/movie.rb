@@ -12,15 +12,39 @@ class Movie < ActiveRecord::Base
     res = res.order(options[:order]) if options.key? :order
     res
   }
+  scope :published , -> {
+    where.not(type: 'Movie::Draft')
+  }
 
-  before_validation :generate_twin_id, on: :create
+  has_one :draft, class_name: 'Movie::Draft'
 
   def self.all_ratings
     all.map(&:rating).uniq
   end
 
-  def generate_twin_id
-    self.twin_id = SecureRandom.uuid
+  def update_attributes_with_draft(params)
+    if draft?
+      update_attributes(params)
+    else
+      create_draft(params).persisted?
+    end
+  end
+
+  def draft?
+    type == 'Movie::Draft'
+  end
+
+  class Published < Movie
+    has_one :draft, class_name: 'Movie::Draft', foreign_key: :draft_id
+  end
+
+  class Draft < Movie
+    belongs_to :origin, class_name: 'Movie::Published', foreign_key: :draft_id
+
+    def publish!
+      origin.update_attributes self.attributes.without(:id)
+      destroy
+    end
   end
 
 end

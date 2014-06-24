@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
   def show
-    @sample_movie = Movie.order("RANDOM()").first
+    @sample_movie = wrap_movie(Movie.order("RANDOM()").first)
   end
 end

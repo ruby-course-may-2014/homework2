@@ -6,4 +6,5 @@ module ApplicationHelper
       text
     end
   end
+
 end

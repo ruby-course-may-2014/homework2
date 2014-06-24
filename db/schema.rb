@@ -21,11 +21,11 @@ ActiveRecord::Schema.define(version: 20140620170347) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.string   "twin_id"
-    t.boolean  "draft",        default: true
+    t.integer  "draft_id"
+    t.string   "type"
   end
 
-  add_index "movies", ["twin_id"], name: "index_movies_on_twin_id"
+  add_index "movies", ["draft_id"], name: "index_movies_on_draft_id"
   add_index "movies", ["user_id"], name: "index_movies_on_user_id"
 
   create_table "users", force: true do |t|

@@ -6,11 +6,24 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :permission_denied!
+  helper_method :allow
 
   protected
+
+  def allow(movie = @movie)
+    Pundit.policy!(current_user, movie)
+  end
 
   def permission_denied!(ex)
     flash[:error] = "You are not allowed!"
     redirect_to root_url
+  end
+
+  def wrap_movie(movie)
+    if allow(movie).publish? && !movie.draft? && movie.draft
+      movie.draft
+    else
+      movie
+    end
   end
 end

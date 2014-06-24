@@ -18,4 +18,6 @@ class MoviePolicy < Struct.new(:user, :movie)
     user.admin? || user == movie.user
   end
   alias_method :edit?, :update?
+  alias_method :publish?, :update?
+
 end
