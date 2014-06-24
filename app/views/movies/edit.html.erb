@@ -1,1 +1,1 @@
-<%= render 'form', movie: @movie %>
+<%= render 'form', movie: wrap_movie(@movie), url: movie_path(@movie), method: 'PATCH' %>

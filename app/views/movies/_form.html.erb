@@ -5,7 +5,7 @@
   </div>
 <% end %>
 
-<%= form_for movie do |f| %>
+<%= form_for movie, url: url, method: method do |f| %>
   <%= f.label :title %>
   <%= f.text_field :title %>
 

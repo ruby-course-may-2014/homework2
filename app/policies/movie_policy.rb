@@ -1,7 +1,7 @@
 class MoviePolicy < Struct.new(:user, :movie)
   class Scope < Struct.new(:user, :scope)
     def resolve
-      scope.where('draft = :d OR user_id = :u', d: false, u: user.id)
+      scope.where('type = :d OR user_id = :u', d: 'Movie::Published', u: user.id)
     end
   end
 

@@ -12,6 +12,7 @@ class Movie < ActiveRecord::Base
     res = res.order(options[:order]) if options.key? :order
     res
   }
+
   scope :published , -> {
     where.not(type: 'Movie::Draft')
   }
@@ -22,12 +23,8 @@ class Movie < ActiveRecord::Base
     all.map(&:rating).uniq
   end
 
-  def update_attributes_with_draft(params)
-    if draft?
-      update_attributes(params)
-    else
-      create_draft(params).persisted?
-    end
+  def self.policy_class
+    MoviePolicy
   end
 
   def draft?
@@ -36,15 +33,21 @@ class Movie < ActiveRecord::Base
 
   class Published < Movie
     has_one :draft, class_name: 'Movie::Draft', foreign_key: :draft_id
+
+    def update_attributes_with_draft(params)
+      create_draft(params).persisted?
+    end
   end
 
   class Draft < Movie
     belongs_to :origin, class_name: 'Movie::Published', foreign_key: :draft_id
 
     def publish!
-      (origin || build_origin).update_attributes self.attributes.without(:id)
+      (origin || build_origin).update_attributes! self.attributes.except('id', 'type')
       destroy
     end
+
+    alias_method :update_attributes_with_draft, :update_attributes
   end
 
 end

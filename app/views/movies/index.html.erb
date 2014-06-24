@@ -28,7 +28,7 @@
         <td><%= movie.title %></td>
         <td><%= movie.rating %></td>
         <td><%= movie.release_date %></td>
-        <td><%= link_to "More about #{movie.title}", movie %></td>
+        <td><%= link_to "More about #{movie.title}", movie_path(movie) %></td>
       </tr>
     <% end %>
   </tbody>

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :permission_denied!
-  helper_method :allow
+  helper_method :allow, :wrap_movie
 
   protected
 
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def wrap_movie(movie)
-    if allow(movie).publish? && !movie.draft? && movie.draft
+    if user_signed_in? && allow(movie).publish? && !movie.draft? && movie.draft
       movie.draft
     else
       movie

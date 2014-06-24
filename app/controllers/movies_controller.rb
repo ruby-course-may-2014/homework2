@@ -42,7 +42,7 @@ class MoviesController < ApplicationController
     authorize @movie
     if @movie.update_attributes_with_draft movie_params
       flash[:notice] = "#{@movie.title} was successfully updated."
-      redirect_to @movie
+      redirect_to movies_url
     else
       render 'edit'
     end
@@ -51,7 +51,7 @@ class MoviesController < ApplicationController
   def publish
     @movie = find_movie
     @movie.publish!
-    redirect_to @movie
+    redirect_to movies_url
   end
 
   def destroy
@@ -70,7 +70,10 @@ class MoviesController < ApplicationController
   def movie_params
     fields = [:title, :rating, :release_date, :description]
     fields += [:published] if current_user.admin?
-    params.require(:movie).permit(fields)
+
+    ns = params.key?(:movie_draft) ? :movie_draft : :movie_published
+
+    params.require(ns).permit(fields)
   end
 
   def all_ratings
